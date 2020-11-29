@@ -6,9 +6,10 @@ How to run (CL windows):
 2. ngrok http 3000
 3. python example_usage.py
 
-# Team / Awards
+# Team
 1. Algernon Sampson : WG6B-1 : First time hacker
 
+# Awards
 1. [GitHub] Best Beginner Hack 1st. Place
 2. [Twilio] Best Use of Twilio
 
