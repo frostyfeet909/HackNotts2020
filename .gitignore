@@ -1,3 +1,5 @@
-
-Resources/keys.json
 tell_me_done/resources/keys.json
+__pycache__
+*.pyc
+*.dir
+*.bbak
