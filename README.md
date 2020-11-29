@@ -1,11 +1,12 @@
 # HackNotts2020 - https://github.com/frostyfeet909/HackNotts2020
 My submission for HackNotts2020
 
-Algernon Sampson - WG6B-1
-
 How to run (CL windows):
 1. ngrok http 3000
 2. python example_usage.py
+
+# Team
+1. Algernon Sampson : WG6B-1
 
 # Main applications
 example_usage.py - An example of what the package does and how it works
