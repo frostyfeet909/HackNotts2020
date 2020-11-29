@@ -9,8 +9,8 @@ How to run (CL windows):
 # Team / Awards
 1. Algernon Sampson : WG6B-1 : First time hacker
 
-[GitHub] Best Beginner Hack 1st. Place
-[Twilio] Best Use of Twilio
+1. [GitHub] Best Beginner Hack 1st. Place
+2. [Twilio] Best Use of Twilio
 
 # Main applications
 example_usage.py - An example of what the package does and how it works
