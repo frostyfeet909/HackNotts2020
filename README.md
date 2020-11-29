@@ -7,7 +7,7 @@ How to run (CL windows):
 3. python example_usage.py
 
 # Team
-1. Algernon Sampson : WG6B-1
+1. Algernon Sampson : WG6B-1 - First time hacker
 
 # Main applications
 example_usage.py - An example of what the package does and how it works
