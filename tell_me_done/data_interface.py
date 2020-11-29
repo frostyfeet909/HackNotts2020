@@ -2,7 +2,7 @@
 from os.path import join, dirname, realpath
 from json import load as json_load
 from json import dump as json_dump
-from pickle import dumps, loads  # Written in Python 3.9 
+from pickle import dumps, loads  # Written in Python 3.9, json probably faster but wanted to try pickle + shelve
 import shelve  # Shelve is lovely
 
 
