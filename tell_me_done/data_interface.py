@@ -1,5 +1,6 @@
 # Reading/Saving user data, twilio info and anything else
-from os.path import join, dirname, realpath
+from os.path import join, dirname, realpath, isfile
+from os import remove
 from json import load as json_load
 from json import dump as json_dump
 from pickle import dumps, loads  # Written in Python 3.9, json probably faster but wanted to try pickle + shelve
@@ -15,12 +16,28 @@ def get_json_data():
     return data
 
 
-def save_json_data(key, content):
+def save_json_data(var):
     # Save data to json file
     path = dirname(realpath(__file__))
-    data = {key: content}
+    data = {"ADMIN_VAR": var}
     with open(join(path, "resources", "vars.json"), "a") as file:
         json_dump(data, file)
+
+
+def get_vars():
+    # Get variables stored by admin
+    path = dirname(realpath(__file__))
+    file_loc = join(path, "resources", "vars.json")
+
+    if isfile(file_loc):
+        with open(file_loc, "r") as file:
+            data = json_load(file)
+
+        remove(file_loc)
+
+        return data["ADMIN_VAR"]
+    else:
+        return None
 
 
 def get_user_data(phone_number=None):

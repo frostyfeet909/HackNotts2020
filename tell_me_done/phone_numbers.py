@@ -4,3 +4,4 @@ class User:
         self.phone_number = number  # Assumed one unique for each user
         self.admin = False
         self.name = None
+        self.notifications = True

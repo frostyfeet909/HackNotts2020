@@ -50,7 +50,7 @@ class Notifier:
             return False
 
         for user in users:
-            if not admin_only or (admin_only and user.admin):
+            if (not admin_only or (admin_only and user.admin)) and user.notifications:
                 print("<< Message sent to %s" % (user.name if user.name is not None else user.phone_number))
                 if user.name is not None:
                     message = user.name + " " + message

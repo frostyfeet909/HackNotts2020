@@ -4,6 +4,7 @@ from flask import Flask, request
 from tell_me_done import data_interface
 from tell_me_done import phone_numbers
 from passlib.hash import sha256_crypt
+from subprocess import call
 
 app = Flask(__name__)
 ADMIN_HASH = '$5$rounds=535000$Xwnyj7m7WB.i1PVA$h3vBiuyDepNh71fH4oBWLYtrqMBmLkhYwOX7Ba5s5b5'
@@ -39,6 +40,14 @@ def set_name(user, name):
     data_interface.save_user_data(user)
 
 
+def set_notifications(user):
+    # Toggles users notifications setting
+    if user.notifications:
+        user.notifications = False
+    else:
+        user.notifications = True
+
+
 def set_newvars(user, var):
     if user.admin:
         data_interface.save_json_data(var)
@@ -59,8 +68,8 @@ def sms():
         user = phone_numbers.User(request.form['From'])
         data_interface.save_user_data(user)
         print("[*] New user registered: %s" % (user.name if user.name is not None else user.phone_number))
-        resp.message("Welcome new user!")
-        resp.message("Commands:\n admin [admin password] - Admin login \n name [name] - Set username")
+        resp.message("Welcome new user! Your now signed up for notifications")
+        resp.message("Commands:\n admin [admin password] - Admin login \n name [name] - Set username \n notification - Toggles notifications \n newvars [variable] - Assign new variables")
 
     print("[*] Message from: %s" % (user.name if user.name is not None else user.phone_number))
     print("    - %s" % command)
@@ -84,6 +93,10 @@ def sms():
                 resp.message("Variables saved!")
             else:
                 resp.message("You do not have permission!")
+
+        elif command.lower().startswith("notification"):
+            set_notifications(user)
+            resp.message("Notifications toggled!")
 
         else:
             resp.message("Command not found!")
