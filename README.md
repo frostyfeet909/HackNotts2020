@@ -2,8 +2,9 @@
 My submission for HackNotts2020
 
 How to run (CL windows):
-1. ngrok http 3000
-2. python example_usage.py
+1. Set twilio information in keys.json
+2. ngrok http 3000
+3. python example_usage.py
 
 # Team
 1. Algernon Sampson : WG6B-1
