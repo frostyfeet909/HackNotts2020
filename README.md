@@ -17,7 +17,7 @@ receiver.py - All things receving from twilio
 sender.py - All things being sent using twilio
 
 # Additional files
-keys.json - All important twilio SID, auth_key and twilio phone number
+keys.json - All important twilio innfo: SID, auth_key and twilio phone number
 
 users. - All user data in persistant storage
 
