@@ -4,6 +4,7 @@ from tell_me_done import data_interface
 
 
 class Notifier:
+    # Main class that sends messages
     def __init__(self, receive=True, done_message="Simulation finished!", var_message="Program requires some variables!"):
         data_json = data_interface.get_json_data()
         self.twilio_number = data_json['TWILIO_PHONE_NUMBER']
@@ -26,10 +27,6 @@ class Notifier:
             print("[*] Flask shutdown")
             self.receiver.terminate()
             self.receiver.join()
-
-    def set_vars_needed(self, var_names):
-        for var in var_names:
-            pass
 
     def notify(self, message=None, admin_only=False, done=False, need_vars=False):
         # Broadcast (notfiy) some message to all users
