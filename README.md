@@ -1,4 +1,4 @@
-# HackNotts2020 - https://github.com/frostyfeet909/HackNotts2020
+# HackNotts2020 - https://devpost.com/software/tell-me-done
 My submission for HackNotts2020
 
 How to run (CL windows):
