@@ -1,4 +1,4 @@
-# HackNotts2020 - https://devpost.com/software/tell-me-done
+# Tell Me Done - https://devpost.com/software/tell-me-done
 My submission for HackNotts2020
 
 How to run (CL windows):
@@ -27,7 +27,7 @@ sender.py - All things being sent using twilio
 # Additional files
 keys.json - All important twilio innfo: SID, auth_key and twilio phone number
 
-users. - All user data in persistant storage
+users - All user data in persistant storage
 
 # Requirements
 1. python 3.9
