@@ -16,19 +16,45 @@ def run():
     app.run(port=3000, debug=False)
 
 
+def process_command(command):
+    # If-Else Chain to determine command
+    if " " in command:
+        argument = " ".join(command.split(" ")[1:])
+
+        if command.lower().startswith("admin"):
+            if set_admin(user, argument):
+                responce = "Correct password! Your an admin"
+            else:
+                responce = "Wrong password! Your no admin"
+
+        elif command.lower().startswith("name"):
+            set_name(user, argument)
+            responce = "Name Set! " + "Welcome " + user.name
+
+        elif command.lower().startswith("newvars"):
+            if set_newvars(user, argument):
+                responce = "Variables saved!"
+            else:
+                responce = "You do not have permission!"
+
+        elif command.lower().startswith("notification"):
+            set_notifications(user)
+            responce = "Notifications toggled!"
+
+        else:
+            responce = "Command not found!"
+
+    return responce
+
+
 def set_admin(user, password):
     # Set user admin under certain conditions
-    try:
-        password = password.encode()
-    except:
-        print("[!] Some weird hooliganry happened with the password")
-        return False
-
-    # Verifies password against the hash (don't actually store plaintext password == more secure)
-    if sha256_crypt.verify(password, ADMIN_HASH):
-        print("[!] New admin: %s" % (user.name if user.name is not None else user.phone_number))
+    if verify_password(password):
+        print("[*] New admin: %s" %
+              (user.name if user.name is not None else user.phone_number))
         user.admin = True
         data_interface.save_user_data(user)
+
         return True
 
     return False
@@ -56,7 +82,7 @@ def set_newvars(user, var):
         return False
 
 
-@app.route("/", methods=['GET', 'POST'])
+@ app.route("/", methods=['GET', 'POST'])
 def sms():
     # Receive incoming messages
     resp = MessagingResponse()
@@ -67,38 +93,16 @@ def sms():
     if not user:
         user = phone_numbers.User(request.form['From'])
         data_interface.save_user_data(user)
-        print("[*] New user registered: %s" % (user.name if user.name is not None else user.phone_number))
+        print("[*] New user registered: %s" %
+              (user.name if user.name is not None else user.phone_number))
         resp.message("Welcome new user! Your now signed up for notifications")
-        resp.message("Commands:\n admin [admin password] - Admin login \n name [name] - Set username \n notification - Toggles notifications \n newvars [variable] - Assign new variables")
+        resp.message(
+            "Commands:\n admin [admin password] - Admin login \n name [name] - Set username \n notification - Toggles notifications \n newvars [variable] - Assign new variables")
 
-    print("[*] Message from: %s" % (user.name if user.name is not None else user.phone_number))
+    print("[*] Message from: %s" %
+          (user.name if user.name is not None else user.phone_number))
     print("    - %s" % command)
 
-    # Do the appropriate command
-    if " " in command:
-        argument = " ".join(command.split(" ")[1:])
-
-        if command.lower().startswith("admin"):
-            if set_admin(user, argument):
-                resp.message("Correct password! Your an admin")
-            else:
-                resp.message("Wrong password! Your no admin")
-
-        elif command.lower().startswith("name"):
-            set_name(user, argument)
-            resp.message("Name Set! " + "Welcome " + user.name)
-
-        elif command.lower().startswith("newvars"):
-            if set_newvars(user, argument):
-                resp.message("Variables saved!")
-            else:
-                resp.message("You do not have permission!")
-
-        elif command.lower().startswith("notification"):
-            set_notifications(user)
-            resp.message("Notifications toggled!")
-
-        else:
-            resp.message("Command not found!")
+    resp.message(process_command(command))
 
     return str(resp)
