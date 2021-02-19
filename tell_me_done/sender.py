@@ -10,7 +10,8 @@ class Notifier:
         self.twilio_number = data_json['TWILIO_PHONE_NUMBER']
         self.done_message = done_message  # Message for when sim is done
         self.var_message = var_message  # Message for what vars admins need to give
-        self.client = Client(data_json['TWILIO_ACCOUNT_SID'], data_json['TWILIO_AUTH_TOKEN'])
+        self.client = Client(
+            data_json['TWILIO_ACCOUNT_SID'], data_json['TWILIO_AUTH_TOKEN'])
 
         if receive:
             # Need a separate process to watch for incoming messages
@@ -48,7 +49,8 @@ class Notifier:
 
         for user in users:
             if (not admin_only or (admin_only and user.admin)) and user.notifications:
-                print("<< Message sent to %s" % (user.name if user.name is not None else user.phone_number))
+                print("<< Message sent to %s" %
+                      (user.name if user.name is not None else user.phone_number))
                 if user.name is not None:
                     message = user.name + " " + message
 
@@ -67,7 +69,8 @@ class Notifier:
             print("[!] No users match this number")
             return False
         else:
-            print("<< Message sent to %s" % (user.name if user.name is not None else user.phone_number))
+            print("<< Message sent to %s" %
+                  (user.name if user.name is not None else user.phone_number))
             if user.name is not None:
                 message = user.name + " " + message
 
