@@ -6,9 +6,8 @@ from tell_me_done import phone_numbers
 from passlib.hash import sha256_crypt
 from subprocess import call
 
+
 app = Flask(__name__)
-ADMIN_HASH = '$5$rounds=535000$Xwnyj7m7WB.i1PVA$h3vBiuyDepNh71fH4oBWLYtrqMBmLkhYwOX7Ba5s5b5'
-# Hash of super secret password
 
 
 def run():

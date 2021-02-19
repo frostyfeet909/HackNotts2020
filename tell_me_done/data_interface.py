@@ -1,6 +1,6 @@
 # Reading/Saving user data, twilio info and anything else
-from os.path import join, dirname, realpath, isfile
-from os import remove
+from os.path import join, dirname, realpath, isfile, isdir
+from os import remove, mkdir
 from json import load as json_load
 from json import dump as json_dump
 # Written in Python 3.9, json probably faster but wanted to try pickle + shelve
@@ -47,9 +47,16 @@ def request_keys(account_SID=True, auth_token=True, phone_number=True, password=
     save_json_data(account_SID, auth_token, phone_numbe, password)
 
 
+def check_dir(path):
+    # Check there's a resources folder, run on user visible functions and those run from Notifier
+    if not isdir(join(path, "resources")):
+        mkdir(join(path, "resources"))
+
+
 def get_json_data():
     # Get data from json file
     path = dirname(realpath(__file__))
+    check_dir(path)
 
     if not isfile(join(path, "resources", "keys.json")):
         request_keys()
@@ -66,6 +73,7 @@ def get_json_data():
 def save_json_data(account_SID, auth_token, phone_number, password):
     # Save data to json file
     path = dirname(realpath(__file__))
+
     data = {"TWILIO_ACCOUNT_SID": account_SID,
             "TWILIO_AUTH_TOKEN": auth_token, "TWILIO_PHONE_NUMBER": phone_number, "ADMIN_PASSWORD": password}
     old_data = get_json_data()
@@ -90,6 +98,7 @@ def save_json_vars(var):
 def get_vars(wait=True):
     # Get variables stored by admin
     path = dirname(realpath(__file__))
+    check_dir(path)
     file_loc = join(path, "resources", "vars.json")
 
     while True:
@@ -109,9 +118,10 @@ def get_vars(wait=True):
 def get_user_data(phone_number=None):
     # Get user data from shelve DB
     users = set()
-    path = join(dirname(realpath(__file__)), "resources", "users")
+    path = dirname(realpath(__file__))
+    check_dir(path)
 
-    with shelve.open(path) as db:
+    with shelve.open(join(path, "resources", "users")) as db:
         for key in list(db.keys()):
             if phone_number is None:
                 users.add(loads(db[key]))
@@ -126,7 +136,8 @@ def get_user_data(phone_number=None):
 
 def save_user_data(user):
     # Save user data to shelve DB (to be persistent data must be explicitly re-stored after every change)
-    path = join(dirname(realpath(__file__)), "resources", "users")
+    path = dirname(realpath(__file__))
+    check_dir(path)
 
-    with shelve.open(path) as db:
+    with shelve.open(join(path, "resources", "users")) as db:
         db[user.phone_number] = dumps(user)
