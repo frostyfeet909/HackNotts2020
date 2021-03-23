@@ -3,25 +3,24 @@ from passlib.hash import sha256_crypt
 from tell_me_done import data_interface
 
 
-def encrypt_password(password):
-    # Hash the password using sha256
-    password = password.encode()
-    password = sha256_crypt.hash(password)
+class Password:
+    def __init__(self, password):
+        self.hash = self._encrypt(password)
 
-    return password
+    def _encrypt(self, password):
+        # Hash the password using sha256
+        try:
+            password = password.encode()
+        except:
+            print("[!!] Some weird hooliganry happened with the password")
+            raise SystemExit
 
+        password = sha256_crypt.hash(password)
 
-def verify_password(password):
-    # Verify the password against the one stored
-    try:
-        password = password.encode()
-    except:
-        print("[!!] Some weird hooliganry happened with the password")
-        raise SystemExit
+        return password
 
-    admin_password = data_interface.get_json_data()["ADMIN_PASSWORD"]
+    def verify_admin(self):
+        # Verify the password against the one stored
+        admin_password = data_interface.get_json_data()["ADMIN_PASSWORD"]
 
-    if sha256_crypt.verify(password, admin_password):
-        return True
-
-    return False
+        return sha256_crypt.verify(password, admin_password)

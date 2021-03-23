@@ -6,6 +6,7 @@ from json import dump as json_dump
 # Written in Python 3.9, json probably faster but wanted to try pickle + shelve
 from pickle import dumps, loads
 from time import sleep
+from getpass import getpass
 from tell_me_done import password_manager
 import shelve  # Shelve is lovely
 
@@ -15,36 +16,27 @@ def request_keys(account_SID=True, auth_token=True, phone_number=True, password=
     print("[!] Twilio account details required!")
     print("\n")
 
-    if not account_SID:
+    if account_SID:
         print("Twilio account SID:")
         account_SID = input(">> ")
-    else:
-        account_SID = None
 
-    if not auth_token:
+    if auth_token:
         print("Twilio authentication token:")
-        auth_token = input(">> ")
-    else:
-        auth_token = None
+        auth_token = getpass(prompt='>> ')
 
-    if not phone_number:
+    if phone_number:
         print("Twili phone number:")
         phone_number = input(">> ")
-    else:
-        phone_number = None
 
-    if not password:
+    if password:
         print("Password for admins:")
-        password = input(">> ")
+        password = getpass(prompt='>> ')
 
         if password == "":
             password = "password"
 
-        password = password_manager.encrypt_password(password)
-    else:
-        password = None
-
-    save_json_data(account_SID, auth_token, phone_numbe, password)
+    password = password_manager.Password(password)
+    save_json_data(account_SID, auth_token, phone_number, password.hash)
 
 
 def check_dir(path):
@@ -64,7 +56,7 @@ def get_json_data():
     with open(join(path, "resources", "keys.json"), "r") as file:
         data = json_load(file)
 
-    if any(not item for item in data.values()):
+    if any(item == "" for item in data.values()):
         request_keys()
 
     return data
@@ -76,11 +68,6 @@ def save_json_data(account_SID, auth_token, phone_number, password):
 
     data = {"TWILIO_ACCOUNT_SID": account_SID,
             "TWILIO_AUTH_TOKEN": auth_token, "TWILIO_PHONE_NUMBER": phone_number, "ADMIN_PASSWORD": password}
-    old_data = get_json_data()
-
-    for key, value in data.items():
-        if value == None:
-            data[key] = old_data[key]
 
     with open(join(path, "resources", "keys.json"), "a") as file:
         json_dump(data, file)
