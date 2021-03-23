@@ -1,7 +1,7 @@
-tell_me_done/resources/keys.json
 __pycache__
 *.pyc
 *.dir
 *.bak
 *.dat
 *.json
+*.exe
