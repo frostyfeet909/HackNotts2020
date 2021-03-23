@@ -3,16 +3,21 @@ from twilio.twiml.messaging_response import MessagingResponse
 from flask import Flask, request
 from tell_me_done import data_interface
 from tell_me_done import phone_numbers
+from tell_me_done import password_manager
 from passlib.hash import sha256_crypt
-from subprocess import call
+from subprocess import Popen
+from pyngrok import ngrok
 
 
 app = Flask(__name__)
 
 
-def run():
+def run(debug=False):
     # Run Flask consistent with ngrok
-    app.run(port=3000, debug=False)
+    port = 3000
+    url = ngrok.connect(port).public_url
+    print('[*] Tunnel URL:', url)
+    app.run(port=port, debug=debug)
 
 
 def process_command(command):
@@ -43,12 +48,16 @@ def process_command(command):
         else:
             responce = "Command not found!"
 
+    else:
+        responce = "Command not found!"
+
     return responce
 
 
 def set_admin(user, password):
     # Set user admin under certain conditions
-    if verify_password(password):
+    password = password_manager.Password(password)
+    if password.verify_admin():
         print("[*] New admin: %s" %
               (user.name if user.name is not None else user.phone_number))
         user.admin = True

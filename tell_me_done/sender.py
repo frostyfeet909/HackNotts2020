@@ -51,19 +51,14 @@ class Notifier:
             if (not admin_only or (admin_only and user.admin)) and user.notifications:
                 print("<< Message sent to %s" %
                       (user.name if user.name is not None else user.phone_number))
-                if user.name is not None:
-                    message = user.name + " " + message
-
-                self.client.messages.create(body=message,
-                                            from_=self.twilio_number,
-                                            to=user.phone_number
-                                            )
+                self.send(message, None, user=user)
 
         return True
 
-    def send(self, message, phone_number):
+    def send(self, message, phone_number, user=None):
         # Send a specific message to some phone number
-        user = data_interface.get_user_data(phone_number)
+        if user is None:
+            user = data_interface.get_user_data(phone_number)
 
         if user is None:
             print("[!] No users match this number")
